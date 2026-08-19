@@ -22,14 +22,17 @@
     --radius: 14px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  
   html, body {
+    width: 100%;
     max-width: 100vw;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Strict fix for mobile shrinking */
     background:var(--navy-950);
     color:var(--white);
     font-family:'IBM Plex Sans', sans-serif;
     -webkit-font-smoothing:antialiased;
     scroll-behavior: smooth;
+    position: relative;
   }
   
   h1,h2,h3,.display{ font-family:'Space Grotesk', sans-serif; letter-spacing:-0.01em; }
@@ -43,7 +46,7 @@
   .spike-mark{ display:inline-flex; align-items:center; gap:8px; }
   .spike-mark svg{ height:22px; width:auto; }
 
-  header{ position:sticky; top:0; z-index:50; background:rgba(5,8,13,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom:1px solid var(--line); }
+  header{ position:sticky; top:0; z-index:50; background:rgba(5,8,13,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom:1px solid var(--line); width: 100%; }
   nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 24px; max-width:1180px; margin:0 auto; }
   .logo{ display:flex; align-items:center; gap:10px; font-size:19px; font-weight:700; }
   .logo .tick{ color:var(--gold); }
@@ -82,7 +85,8 @@
   .skillrow{ display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-top:1px solid var(--line); font-size:13.5px; }
   .skillrow .badge{ font-size:10px; padding:3px 9px; border-radius:999px; border:1px solid rgba(201,162,75,0.4); color:var(--gold-bright); }
 
-  .trust{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:22px 0; overflow:hidden; width: 100%;}
+  /* Strict width constraints to stop page stretching */
+  .trust{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:22px 0; overflow:hidden; width: 100%; display: block; position: relative;}
   .trust-track{ 
     display:flex; gap:48px; width:max-content; 
     animation:scroll 26s linear infinite; 
@@ -93,7 +97,7 @@
   .trust-item{ display:flex; align-items:center; gap:10px; font-size:14px; color:var(--slate); white-space:nowrap; }
   .trust-item svg{ color:var(--gold); }
 
-  section{ padding:96px 0; width: 100%;}
+  section{ padding:96px 0; width: 100%; position: relative;}
   .sec-head{ max-width:640px; margin-bottom:52px; }
   .sec-eyebrow{ color:var(--gold); font-size:12px; margin-bottom:14px; }
   .sec-head h2{ font-size:clamp(28px,4vw,42px); font-weight:700; line-height:1.1; }
@@ -152,7 +156,7 @@
   .pkg-tag{ font-family:'IBM Plex Mono'; font-size:9.5px; color:var(--live); }
   .pkg-card .seats-left{ margin-bottom:12px; }
 
-  .mentors{ background:var(--navy-900); border-top:1px solid var(--line); border-bottom:1px solid var(--line); width: 100%; overflow: hidden;}
+  .mentors{ background:var(--navy-900); border-top:1px solid var(--line); border-bottom:1px solid var(--line); width: 100%; overflow: hidden; display: block; position: relative;}
   .mentors-track{ 
     display:flex; gap:60px; width:max-content; 
     animation:scroll 34s linear infinite; padding:6px 0; 
@@ -185,16 +189,16 @@
   .reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
   .reveal.in{ opacity:1; transform:none; }
 
-  /* modal styles */
+  /* Modal Container Styles */
   .modal-overlay{ position:fixed; inset:0; background:rgba(5,8,13,0.72); backdrop-filter:blur(6px); -webkit-backdrop-filter: blur(6px); z-index:9999; display:none; align-items:center; justify-content:center; padding:20px; }
   .modal-overlay.open{ display:flex; }
   .modal{ background:linear-gradient(180deg, var(--navy-850), var(--navy-900)); border:1px solid var(--line); border-radius:18px; padding:30px; width:100%; max-width:420px; position:relative; max-height:90vh; overflow-y:auto; }
   .modal-close{ position:absolute; top:16px; right:16px; cursor:pointer; color:var(--slate); background:none; border:none; z-index: 10; }
   .modal h3{ font-size:19px; margin-bottom:6px; }
   .modal .modal-sub{ font-size:13px; color:var(--slate); margin-bottom:22px; }
+  
   .field{ margin-bottom:16px; }
   .field label{ display:block; font-size:12px; color:var(--slate); margin-bottom:6px; font-family:'IBM Plex Mono'; text-transform:uppercase; letter-spacing:.05em; }
-  
   .field input, .field select{ width:100%; background:var(--navy-950); border:1px solid var(--line); border-radius:9px; padding:11px 13px; color:var(--white); font-size:14px; font-family:'IBM Plex Sans'; }
   .field input:focus, .field select:focus{ outline:none; border-color:var(--gold); }
   
@@ -209,7 +213,6 @@
   .modal-submit{ width:100%; justify-content:center; padding:14px; font-size:15px; margin-top:6px; }
   .modal-amount{ font-family:'IBM Plex Mono'; font-size:11px; opacity:.8; margin-left:6px; }
   
-  /* Razorpay styling */
   #step2 { display: none; text-align: center; }
   #step2 p { color: var(--live); margin-bottom: 20px; font-size: 15px;}
   .rzp-wrapper { display: flex; justify-content: center; margin-top: 15px; min-height: 50px; }
@@ -428,7 +431,7 @@
       <h3>Details Confirmed!</h3>
       <p>Please click the button below to complete your payment securely via Razorpay.</p>
       <div class="rzp-wrapper" id="rzpContainer">
-        <!-- Razorpay Script injected here Dynamically and wiped on close -->
+        <!-- Razorpay Script injected here Dynamically -->
       </div>
     </div>
   </div>
@@ -547,7 +550,7 @@ sampleReviews.forEach(([name,role,stars,text])=>{
 });
 
 
-// ---------- MODAL & PAYMENT LOGIC (Strict Bug Fix) ----------
+// ---------- THE ULTIMATE BUG FIX LOGIC ----------
 let currentRzpId = "";
 let currentTitle = "";
 
@@ -555,47 +558,50 @@ function openModal(title, amountToPay, rzpId) {
   currentRzpId = rzpId;
   currentTitle = title;
   
-  // 1. Force Reset UI
+  // 1. Reset UI visibility
   document.getElementById('step1').style.display = 'block';
   document.getElementById('step2').style.display = 'none';
   document.getElementById('enrollForm').reset();
   
-  // 2. Set Course Title
+  // 2. Set Course Title safely
   document.getElementById('selectedCourseField').value = title;
   
   // 3. Set Labels
   document.getElementById('modalTitle').innerText = amountToPay === '99' ? 'Book Your Seat' : 'Pay Now';
   document.getElementById('modalPrice').innerText = `(₹${amountToPay})`;
   
-  // 4. MUST Re-enable Submit Button in case it was stuck
+  // 4. Force Submit Button active
   const submitBtn = document.getElementById('submitBtn');
   submitBtn.disabled = false;
   submitBtn.innerHTML = `${amountToPay === '99' ? 'Book Your Seat' : 'Confirm & Pay'} <span class="modal-amount">(₹${amountToPay})</span>`;
 
+  // 5. Show modal
   document.getElementById('enrollModal').classList.add('open');
 }
 
 function closeModal() {
-  document.getElementById('enrollModal').classList.remove('open');
+  const step2 = document.getElementById('step2');
   
   // THE MOST IMPORTANT FIX: 
-  // Wipe out the Razorpay script entirely so it releases its invisible lock on the page!
-  document.getElementById('rzpContainer').innerHTML = '';
-  
-  // Bring it back to Step 1 for next time
-  document.getElementById('step1').style.display = 'block';
-  document.getElementById('step2').style.display = 'none';
-  
-  // Reset Button lock just to be extra safe
-  document.getElementById('submitBtn').disabled = false;
+  // Agar Razorpay script page pe load ho chuka tha (Step 2 active tha), 
+  // toh directly page refresh kardo taki uska invisible lock hat jaye.
+  if (step2.style.display === 'block') {
+    window.location.reload();
+  } else {
+    // Agar form fill kiye bina close kiya hai, toh simply hide kardo.
+    document.getElementById('enrollModal').classList.remove('open');
+    document.getElementById('step1').style.display = 'block';
+    step2.style.display = 'none';
+    document.getElementById('submitBtn').disabled = false;
+  }
 }
 
-// Ensure clicking outside closes it properly
+// Click background to close
 document.getElementById('enrollModal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 
-// Formspree Submit
+// Form Submission
 document.getElementById('enrollForm').addEventListener('submit', function(e) {
   e.preventDefault();
   
@@ -609,6 +615,7 @@ document.getElementById('enrollForm').addEventListener('submit', function(e) {
   formData.append('Phone', document.getElementById('userPhone').value);
   formData.append('Email', document.getElementById('userEmail').value);
 
+  // Use Formspree silently
   fetch('https://formspree.io/f/xgaworqj', {
     method: 'POST',
     body: formData,
@@ -619,7 +626,7 @@ document.getElementById('enrollForm').addEventListener('submit', function(e) {
     document.getElementById('step1').style.display = 'none';
     document.getElementById('step2').style.display = 'block';
     
-    // Inject clean, fresh Razorpay script instantly
+    // Inject clean Razorpay script
     const rzpContainer = document.getElementById('rzpContainer');
     rzpContainer.innerHTML = ''; 
     
@@ -632,7 +639,6 @@ document.getElementById('enrollForm').addEventListener('submit', function(e) {
     rzpForm.appendChild(rzpScript);
     rzpContainer.appendChild(rzpForm);
 
-    // Re-enable button in background 
     btn.disabled = false;
 
   }).catch(error => {
@@ -642,6 +648,7 @@ document.getElementById('enrollForm').addEventListener('submit', function(e) {
   });
 });
 
+// Scroll Reveal Animations
 const obs = new IntersectionObserver(entries=>{
   entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} });
 },{threshold:0.15});
