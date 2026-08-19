@@ -32,7 +32,6 @@
     scroll-behavior: smooth;
   }
   
-  /* Mobile Overflow Fix Wrapper */
   .main-wrapper {
     width: 100%;
     overflow: hidden;
@@ -90,17 +89,13 @@
   .skillrow .badge{ font-size:10px; padding:3px 9px; border-radius:999px; border:1px solid rgba(201,162,75,0.4); color:var(--gold-bright); }
 
   .trust{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:22px 0; overflow:hidden; width: 100%;}
-  
-  /* Hardware Accelerated Marquee for Smooth Performance */
   .trust-track{ 
     display:flex; gap:48px; width:max-content; 
     animation:scroll 26s linear infinite; 
-    will-change: transform;
-    transform: translateZ(0); 
+    will-change: transform; transform: translateZ(0); 
   }
   .trust:hover .trust-track{ animation-play-state:paused; }
   @keyframes scroll{ from{ transform:translate3d(0,0,0);} to{ transform:translate3d(-50%,0,0);} }
-  
   .trust-item{ display:flex; align-items:center; gap:10px; font-size:14px; color:var(--slate); white-space:nowrap; }
   .trust-item svg{ color:var(--gold); }
 
@@ -110,7 +105,7 @@
   .sec-head h2{ font-size:clamp(28px,4vw,42px); font-weight:700; line-height:1.1; }
   .sec-head p{ margin-top:14px; color:var(--slate); font-size:16px; line-height:1.6; }
 
-  /* ABOUT SECTION STYLES */
+  /* ABOUT SECTION */
   .about-section { background:var(--navy-900); border-top:1px solid var(--line); padding: 70px 0; }
   .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
   @media(max-width:900px){ .about-grid{ grid-template-columns:1fr; } }
@@ -206,7 +201,6 @@
   .field{ margin-bottom:16px; }
   .field label{ display:block; font-size:12px; color:var(--slate); margin-bottom:6px; font-family:'IBM Plex Mono'; text-transform:uppercase; letter-spacing:.05em; }
   
-  /* Form Inputs including the new readonly field */
   .field input, .field select{ width:100%; background:var(--navy-950); border:1px solid var(--line); border-radius:9px; padding:11px 13px; color:var(--white); font-size:14px; font-family:'IBM Plex Sans'; }
   .field input:focus, .field select:focus{ outline:none; border-color:var(--gold); }
   
@@ -215,22 +209,23 @@
     border-color: rgba(201, 162, 75, 0.3) !important;
     color: var(--gold-bright) !important;
     font-weight: 600;
-    pointer-events: none; /* prevents typing */
+    pointer-events: none; 
   }
 
   .modal-submit{ width:100%; justify-content:center; padding:14px; font-size:15px; margin-top:6px; }
   .modal-amount{ font-family:'IBM Plex Mono'; font-size:11px; opacity:.8; margin-left:6px; }
   
-  /* Razorpay specific styling */
+  /* Razorpay styling */
   #step2 { display: none; text-align: center; }
   #step2 p { color: var(--live); margin-bottom: 20px; font-size: 15px;}
   .rzp-wrapper { display: flex; justify-content: center; margin-top: 15px; }
+  .rzp-box { width: 100%; }
 
 </style>
 </head>
 <body>
 
-<div class="main-wrapper"> <!-- Fixes mobile overflow -->
+<div class="main-wrapper"> 
 
   <header>
     <nav>
@@ -408,13 +403,13 @@
     </div>
   </footer>
 
-</div> <!-- End of main-wrapper -->
+</div> 
 
 <a class="wa-float" href="https://wa.me/917005199436?text=Hi%20Spike%20Skills%2C%20I%20want%20to%20know%20more%20about%20your%20courses." target="_blank" aria-label="Chat on WhatsApp">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.6 6.32A8.86 8.86 0 0 0 3.03 16.6L2 21l4.5-1.02a8.87 8.87 0 0 0 4.24 1.08h0a8.87 8.87 0 0 0 6.86-14.74Zm-5.86 13.6h0a7.4 7.4 0 0 1-3.77-1.03l-.27-.16-2.8.71.75-2.73-.18-.28a7.37 7.37 0 1 1 6.27 3.49Zm4.04-5.52c-.22-.11-1.31-.65-1.51-.72s-.35-.11-.5.11-.57.72-.7.87-.26.17-.48.06a6.06 6.06 0 0 1-1.78-1.1 6.7 6.7 0 0 1-1.23-1.53c-.13-.22 0-.34.1-.45.1-.1.22-.26.33-.39a1.5 1.5 0 0 0 .22-.37.4.4 0 0 0 0-.39c-.06-.11-.5-1.2-.68-1.65s-.36-.37-.5-.38h-.43a.82.82 0 0 0-.6.28 2.5 2.5 0 0 0-.78 1.86 4.35 4.35 0 0 0 .91 2.3 9.95 9.95 0 0 0 3.81 3.37c.53.23.95.36 1.27.47a3.05 3.05 0 0 0 1.4.09 2.3 2.3 0 0 0 1.5-1.06 1.87 1.87 0 0 0 .13-1.06c-.06-.1-.2-.16-.42-.27Z"/></svg>
 </a>
 
-<!-- Enroll Modal (2-Step Formspree + Razorpay) -->
+<!-- Enroll Modal (2-Step Formspree + Pre-loaded Razorpay) -->
 <div class="modal-overlay" id="enrollModal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">
@@ -426,7 +421,6 @@
       <h3 id="modalTitle">Enroll Now</h3>
       <p class="modal-sub" id="modalSub">Fill in your details to reserve your seat.</p>
       <form id="enrollForm">
-        <!-- New Visual Readonly Field for the selected course -->
         <div class="field">
           <label>Selected Course / Package</label>
           <input type="text" id="selectedCourseField" class="course-readonly" readonly>
@@ -446,14 +440,34 @@
       <h3>Details Confirmed!</h3>
       <p>Please click the button below to complete your payment securely via Razorpay.</p>
       <div class="rzp-wrapper" id="rzpContainer">
-        <!-- Razorpay Script injected here -->
+        <!-- Razorpay scripts pre-loaded directly here -->
+        <div id="rzp-pl_TRjFjl73rw4r9U" class="rzp-box" style="display:none;">
+          <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjFjl73rw4r9U" async></script></form>
+        </div>
+        <div id="rzp-pl_TRjKKnN3HP1W8q" class="rzp-box" style="display:none;">
+          <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjKKnN3HP1W8q" async></script></form>
+        </div>
+        <div id="rzp-pl_TRjLrcfVXT3qg4" class="rzp-box" style="display:none;">
+          <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjLrcfVXT3qg4" async></script></form>
+        </div>
+        <div id="rzp-pl_TRjMq5lvLyQ6Wl" class="rzp-box" style="display:none;">
+          <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjMq5lvLyQ6Wl" async></script></form>
+        </div>
+        <div id="rzp-pl_TRjO8tpR7NXNe3" class="rzp-box" style="display:none;">
+          <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjO8tpR7NXNe3" async></script></form>
+        </div>
+        <div id="rzp-pl_TRjPBUGaG28Mzp" class="rzp-box" style="display:none;">
+          <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjPBUGaG28Mzp" async></script></form>
+        </div>
+        <div id="rzp-pl_TRjQ5AXxEZieuD" class="rzp-box" style="display:none;">
+          <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjQ5AXxEZieuD" async></script></form>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// --- EXACT 9 COURSES FROM YOUR CODE --- 
 const courses = [
   { title: "AI Automation Digital Marketing", desc: "Digital marketing fundamentals, AI-assisted workflows, SEO, social media and lead generation, built around live practical campaigns.", fee: 2299, rzp: "pl_TRjFjl73rw4r9U" },
   { title: "AI Automation Web Development", desc: "Frontend and backend fundamentals with AI-assisted development workflows, culminating in a real portfolio project.", fee: 2399, rzp: "pl_TRjFjl73rw4r9U" },
@@ -466,7 +480,6 @@ const courses = [
   { title: "AI Sales Assistant", desc: "AI-assisted sales workflows, lead qualification, scripts and CRM fundamentals for sales-readiness.", fee: 2199, rzp: "pl_TRjFjl73rw4r9U" }
 ];
 
-// --- EXACT 6 PACKAGES FROM YOUR CODE ---
 const pkgs = [
   { title: "Career & Interview Preparation", desc: "HR interview readiness, mock questions and interview strategy.", fee: 199, rzp: "pl_TRjKKnN3HP1W8q" },
   { title: "Resume & LinkedIn Building", desc: "ATS-friendly resume and LinkedIn profile optimization.", fee: 199, rzp: "pl_TRjLrcfVXT3qg4" },
@@ -486,7 +499,6 @@ function seatsLine(){
   return `<span class="dot"></span> Limited Seats — only a few left in this batch`;
 }
 
-// ---------- trust bar ----------
 const trustItems = ["Live Classes","Practical Training","Industry Experts","Certificate","Interview Preparation","Placement Support","Pay After Placement"];
 const track = document.getElementById('trustTrack');
 [...trustItems, ...trustItems].forEach(t=>{
@@ -496,7 +508,6 @@ const track = document.getElementById('trustTrack');
   track.appendChild(el);
 });
 
-// ---------- pay-after-placement timeline ----------
 const steps = [["01","Enroll","Book your seat for just ₹99"],["02","Learn","Live, instructor-led classes"],["03","Practice","Hands-on projects & tasks"],["04","Prepare","Interview & resume readiness"],["05","Placement","Support toward a placement"],["06","Pay","Pay course fee after placement"]];
 const tl = document.getElementById('timeline');
 steps.forEach(([n,title,desc])=>{
@@ -505,7 +516,6 @@ steps.forEach(([n,title,desc])=>{
   tl.appendChild(el);
 });
 
-// ---------- course cards (₹99 Booking) ----------
 const grid = document.getElementById('courseGrid');
 courses.forEach((c)=>{
   const {inflated, discounted} = priceDisplay(c.fee);
@@ -528,7 +538,6 @@ courses.forEach((c)=>{
   grid.appendChild(el);
 });
 
-// ---------- package cards (Full Pay Now) ----------
 const pgrid = document.getElementById('pkgGrid');
 pkgs.forEach((p)=>{
   const {inflated, discounted} = priceDisplay(p.fee);
@@ -543,7 +552,6 @@ pkgs.forEach((p)=>{
   pgrid.appendChild(el);
 });
 
-// ---------- mentors marquee ----------
 const mentorLines = [
   "Live guidance from experienced mentors and industry trainers",
   "Guest sessions from professionals working across hiring companies",
@@ -557,7 +565,6 @@ const mtrack = document.getElementById('mentorsTrack');
   mtrack.appendChild(el);
 });
 
-// ---------- sample reviews ----------
 const sampleReviews = [
   ["Rahul Sharma","Placed at TCS","★★★★★","Spike Skills changed my life! The Pay After Placement model gave me the confidence to focus entirely on my skills."],
   ["Priya Desai","Placed at Startup","★★★★☆","The booking fee for the Digital Marketing course is a steal. The live classes are highly interactive."],
@@ -571,7 +578,7 @@ sampleReviews.forEach(([name,role,stars,text])=>{
 });
 
 
-// ---------- MODAL & PAYMENT LOGIC (Formspree + Razorpay) ----------
+// ---------- MODAL & PAYMENT LOGIC ----------
 let currentRzpId = "";
 let currentTitle = "";
 
@@ -579,17 +586,19 @@ function openModal(title, amountToPay, rzpId) {
   currentRzpId = rzpId;
   currentTitle = title;
   
-  // Reset Form and UI
   document.getElementById('step1').style.display = 'block';
   document.getElementById('step2').style.display = 'none';
   document.getElementById('enrollForm').reset();
   
-  // Update the new visually locked course selection field
   document.getElementById('selectedCourseField').value = title;
   
   document.getElementById('modalTitle').innerText = amountToPay === '99' ? 'Book Your Seat' : 'Pay Now';
   document.getElementById('modalPrice').innerText = `(₹${amountToPay})`;
-  document.getElementById('submitBtn').innerHTML = `${amountToPay === '99' ? 'Book Your Seat' : 'Confirm & Pay'} <span class="modal-amount">(₹${amountToPay})</span>`;
+  
+  // Make sure submit button is fully active
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = `${amountToPay === '99' ? 'Book Your Seat' : 'Confirm & Pay'} <span class="modal-amount">(₹${amountToPay})</span>`;
 
   document.getElementById('enrollModal').classList.add('open');
 }
@@ -598,7 +607,11 @@ function closeModal() {
   document.getElementById('enrollModal').classList.remove('open');
 }
 
-// Submitting to Formspree silently, then showing Razorpay
+// Close modal if clicked outside
+document.getElementById('enrollModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
 document.getElementById('enrollForm').addEventListener('submit', function(e) {
   e.preventDefault();
   
@@ -612,39 +625,30 @@ document.getElementById('enrollForm').addEventListener('submit', function(e) {
   formData.append('Phone', document.getElementById('userPhone').value);
   formData.append('Email', document.getElementById('userEmail').value);
 
-  // SEND TO FORMSPREE
   fetch('https://formspree.io/f/xgaworqj', {
     method: 'POST',
     body: formData,
     headers: { 'Accept': 'application/json' }
   }).then(response => {
     
-    // Switch to Razorpay Step
     document.getElementById('step1').style.display = 'none';
     document.getElementById('step2').style.display = 'block';
     
-    // Inject Razorpay script dynamically
-    const rzpContainer = document.getElementById('rzpContainer');
-    rzpContainer.innerHTML = ''; 
+    // Hide all Razorpay forms first
+    document.querySelectorAll('.rzp-box').forEach(box => box.style.display = 'none');
     
-    const rzpForm = document.createElement('form');
-    const rzpScript = document.createElement('script');
-    rzpScript.src = "https://checkout.razorpay.com/v1/payment-button.js";
-    rzpScript.dataset.payment_button_id = currentRzpId;
-    rzpScript.async = true;
-    
-    rzpForm.appendChild(rzpScript);
-    rzpContainer.appendChild(rzpForm);
+    // Display the matching pre-loaded Razorpay form
+    const targetRzp = document.getElementById('rzp-' + currentRzpId);
+    if(targetRzp) targetRzp.style.display = 'block';
 
     btn.disabled = false;
   }).catch(error => {
-    alert("Something went wrong. Please try again.");
+    alert("Something went wrong. Please check your connection and try again.");
     btn.innerHTML = `Try Again`;
     btn.disabled = false;
   });
 });
 
-// ---------- scroll reveal ----------
 const obs = new IntersectionObserver(entries=>{
   entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} });
 },{threshold:0.15});
