@@ -212,6 +212,16 @@
   #step2 { display: none; text-align: center; }
   #step2 p { color: var(--live); margin-bottom: 20px; font-size: 15px;}
   .rzp-wrapper { display: flex; justify-content: center; margin-top: 15px; min-height: 50px; }
+  
+  /* HIDDEN RAZORPAY VAULT - keeps forms alive but out of sight */
+  #rzp-vault {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+  }
 
 </style>
 </head>
@@ -396,6 +406,18 @@
   <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.6 6.32A8.86 8.86 0 0 0 3.03 16.6L2 21l4.5-1.02a8.87 8.87 0 0 0 4.24 1.08h0a8.87 8.87 0 0 0 6.86-14.74Zm-5.86 13.6h0a7.4 7.4 0 0 1-3.77-1.03l-.27-.16-2.8.71.75-2.73-.18-.28a7.37 7.37 0 1 1 6.27 3.49Zm4.04-5.52c-.22-.11-1.31-.65-1.51-.72s-.35-.11-.5.11-.57.72-.7.87-.26.17-.48.06a6.06 6.06 0 0 1-1.78-1.1 6.7 6.7 0 0 1-1.23-1.53c-.13-.22 0-.34.1-.45.1-.1.22-.26.33-.39a1.5 1.5 0 0 0 .22-.37.4.4 0 0 0 0-.39c-.06-.11-.5-1.2-.68-1.65s-.36-.37-.5-.38h-.43a.82.82 0 0 0-.6.28 2.5 2.5 0 0 0-.78 1.86 4.35 4.35 0 0 0 .91 2.3 9.95 9.95 0 0 0 3.81 3.37c.53.23.95.36 1.27.47a3.05 3.05 0 0 0 1.4.09 2.3 2.3 0 0 0 1.5-1.06 1.87 1.87 0 0 0 .13-1.06c-.06-.1-.2-.16-.42-.27Z"/></svg>
 </a>
 
+
+<!-- THE RAZORPAY VAULT (Hidden safely out of the way) -->
+<div id="rzp-vault">
+  <div id="btn-pl_TRjFjl73rw4r9U"><form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjFjl73rw4r9U" async></script></form></div>
+  <div id="btn-pl_TRjKKnN3HP1W8q"><form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjKKnN3HP1W8q" async></script></form></div>
+  <div id="btn-pl_TRjLrcfVXT3qg4"><form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjLrcfVXT3qg4" async></script></form></div>
+  <div id="btn-pl_TRjMq5lvLyQ6Wl"><form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjMq5lvLyQ6Wl" async></script></form></div>
+  <div id="btn-pl_TRjO8tpR7NXNe3"><form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjO8tpR7NXNe3" async></script></form></div>
+  <div id="btn-pl_TRjPBUGaG28Mzp"><form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjPBUGaG28Mzp" async></script></form></div>
+  <div id="btn-pl_TRjQ5AXxEZieuD"><form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_TRjQ5AXxEZieuD" async></script></form></div>
+</div>
+
 <!-- Enroll Modal -->
 <div class="modal-overlay" id="enrollModal">
   <div class="modal">
@@ -427,7 +449,7 @@
       <h3>Details Confirmed!</h3>
       <p>Please click the button below to complete your payment securely via Razorpay.</p>
       <div class="rzp-wrapper" id="rzpContainer">
-        <!-- Razorpay Script injected here Dynamically -->
+        <!-- Razorpay button will be moved here from the vault -->
       </div>
     </div>
   </div>
@@ -546,62 +568,54 @@ sampleReviews.forEach(([name,role,stars,text])=>{
 });
 
 
-// ---------- MODAL & PAYMENT LOGIC (STRICT BUG FIX) ----------
+// ---------- THE FIX: MODAL & PAYMENT LOGIC ----------
 let currentRzpId = "";
 let currentTitle = "";
 
 function openModal(title, amountToPay, rzpId) {
-  // EXTRA SAFETY: Khulne se pehle bhi koi purani invisible layer ho to use delete kardo
-  document.querySelectorAll('.razorpay-container').forEach(c => c.remove());
-  
   currentRzpId = rzpId;
   currentTitle = title;
   
-  // 1. Force Reset UI
+  // 1. Reset UI to Step 1
   document.getElementById('step1').style.display = 'block';
   document.getElementById('step2').style.display = 'none';
   document.getElementById('enrollForm').reset();
   
-  // 2. Set Course Title
+  // 2. Set Course Info
   document.getElementById('selectedCourseField').value = title;
-  
-  // 3. Set Labels
   document.getElementById('modalTitle').innerText = amountToPay === '99' ? 'Book Your Seat' : 'Pay Now';
   document.getElementById('modalPrice').innerText = `(₹${amountToPay})`;
   
-  // 4. MUST Re-enable Submit Button in case it was stuck
+  // 3. Make button clickable again
   const submitBtn = document.getElementById('submitBtn');
   submitBtn.disabled = false;
   submitBtn.innerHTML = `${amountToPay === '99' ? 'Book Your Seat' : 'Confirm & Pay'} <span class="modal-amount">(₹${amountToPay})</span>`;
 
+  // 4. Show Modal
   document.getElementById('enrollModal').classList.add('open');
 }
 
-// YAHAN HAI ASLI JADU (BUG FIX)
 function closeModal() {
   document.getElementById('enrollModal').classList.remove('open');
   
-  // THE MOST IMPORTANT FIX: 
-  // Jaise hi modal band ho, Razorpay ke zombi/invisible layer ko poori tarah screen se hatado
-  document.querySelectorAll('.razorpay-container').forEach(container => container.remove());
+  // IMPORTANT: Move Razorpay button back to the hidden vault! (Isi wajah se phle hang ho raha tha)
+  const rzpContainer = document.getElementById('rzpContainer');
+  if(rzpContainer.children.length > 0) {
+      const activeBtn = rzpContainer.children[0];
+      document.getElementById('rzp-vault').appendChild(activeBtn);
+  }
   
-  // Form container ko bhi flush kardo
-  document.getElementById('rzpContainer').innerHTML = '';
-  
-  // Wapas Step 1 dikha do next time ke liye
   document.getElementById('step1').style.display = 'block';
   document.getElementById('step2').style.display = 'none';
-  
-  // Button wapas click karne layak banado
   document.getElementById('submitBtn').disabled = false;
 }
 
-// Bahar click karne pe bhi close aur clean up karega
+// Ensure clicking outside closes it cleanly
 document.getElementById('enrollModal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 
-// Formspree Submit and Razorpay trigger
+// Form Submit
 document.getElementById('enrollForm').addEventListener('submit', function(e) {
   e.preventDefault();
   
@@ -621,23 +635,17 @@ document.getElementById('enrollForm').addEventListener('submit', function(e) {
     headers: { 'Accept': 'application/json' }
   }).then(response => {
     
-    // Switch Views
+    // Bring out the specific Razorpay button from the vault
+    const targetBtn = document.getElementById('btn-' + currentRzpId);
+    if(targetBtn) {
+        document.getElementById('rzpContainer').appendChild(targetBtn);
+    }
+    
+    // Switch to Step 2
     document.getElementById('step1').style.display = 'none';
     document.getElementById('step2').style.display = 'block';
     
-    // Inject clean, fresh Razorpay script instantly
-    const rzpContainer = document.getElementById('rzpContainer');
-    rzpContainer.innerHTML = ''; 
-    
-    const rzpForm = document.createElement('form');
-    const rzpScript = document.createElement('script');
-    rzpScript.src = "https://checkout.razorpay.com/v1/payment-button.js";
-    rzpScript.dataset.payment_button_id = currentRzpId;
-    rzpScript.async = true;
-    
-    rzpForm.appendChild(rzpScript);
-    rzpContainer.appendChild(rzpForm);
-
+    btn.disabled = false;
   }).catch(error => {
     alert("Network error. Please try again.");
     btn.innerHTML = `Try Again`;
